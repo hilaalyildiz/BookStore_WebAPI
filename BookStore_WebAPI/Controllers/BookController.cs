@@ -48,5 +48,34 @@ namespace BookStore_WebAPI.Controllers
             var book = BookList.Where(book => book.Id == id).SingleOrDefault();
             return book;
         }
+
+        [HttpPost]
+        public IActionResult AddBook([FromBody] Book newBook)
+        {
+            var book = BookList.SingleOrDefault(x => x.Title == newBook.Title);
+
+            if (book is not null)
+                return BadRequest();
+
+            BookList.Add(newBook);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateBook(int id, [FromBody] Book updateBook)
+        {
+            var book = BookList.SingleOrDefault(book => book.Id == id);
+
+            if (book is null)
+                return BadRequest();
+
+            book.GenreID = updateBook.GenreID != default ? updateBook.GenreID : book.GenreID;
+            book.PageCount = updateBook.PageCount != default ? updateBook.PageCount : book.PageCount;
+            book.Title = updateBook.Title != default ? updateBook.Title : book.Title;
+            book.PublishDate = updateBook.PublishDate != default ? updateBook.PublishDate : book.PublishDate;
+            book.Id = updateBook.Id != default ? updateBook.Id : book.Id;
+
+            return Ok();
+        }
     }
 }
