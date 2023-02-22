@@ -77,5 +77,17 @@ namespace BookStore_WebAPI.Controllers
 
             return Ok();
         }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBook(int id)
+        {
+            var book = BookList.SingleOrDefault(book => book.Id == id);
+
+            if (book is null)
+                return BadRequest();
+
+            BookList.Remove(book);
+            return Ok();
+        }
     }
 }
