@@ -7,7 +7,7 @@ namespace BookStore_WebAPI.Controllers
 {
     [ApiController]
     [Route("[controller]s")]
-    public class BookController : ControllerBase
+    public class Book_Controller : ControllerBase
     {
         private static List<Book> BookList = new List<Book>()
         {
