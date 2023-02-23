@@ -4,6 +4,9 @@ using System;
 using System.Linq;
 using BookStore_WebAPI.DbOperations;
 using Microsoft.EntityFrameworkCore;
+using BookStore_WebAPI.BookOperations.GetBooks;
+using BookStore_WebAPI.BookOperations.CreateBook;
+using static BookStore_WebAPI.BookOperations.CreateBook.CreateBookCommand;
 
 namespace BookStore_WebAPI.Controllers
 {
@@ -20,10 +23,11 @@ namespace BookStore_WebAPI.Controllers
     
 
         [HttpGet]
-        public List<Book> GetBook()
+        public IActionResult GetBook()
         {
-            var bookList = _context.Books.OrderBy(x => x.Id).ToList<Book>();
-            return bookList;
+            GetBooksQuery query = new GetBooksQuery(_context);
+            var result = query.Handle();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -34,15 +38,19 @@ namespace BookStore_WebAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddBook([FromBody] Book newBook)
+        public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
-            var book = _context.Books.SingleOrDefault(x => x.Title == newBook.Title);
+            CreateBookCommand command = new CreateBookCommand(_context);
 
-            if (book is not null)
-                return BadRequest();
+            try
+            {
+                command.Model = newBook;
+                command.Handle();
+            } catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-            _context.Books.Add(newBook);
-            _context.SaveChanges();
             return Ok();
         }
 
