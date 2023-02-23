@@ -2,69 +2,54 @@
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using BookStore_WebAPI.DbOperations;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore_WebAPI.Controllers
 {
-    [ApiController]
-    [Route("[controller]s")]
-    public class Book_Controller : ControllerBase
-    {
-        private static List<Book> BookList = new List<Book>()
+        [ApiController]
+        [Route("[controller]s")]
+        public class Book_Controller : ControllerBase
         {
-            new Book{
-                    Id =1,
-                    Title="Lean Startup",
-                    GenreID=1,
-                    PageCount=200,
-                    PublishDate=new DateTime(2001,06,26)
-                },
-            new Book{
-                    Id =2,
-                    Title="Hearland",
-                    GenreID=2,
-                    PageCount=250,
-                    PublishDate=new DateTime(2011,06,16)
-                },
-            new Book{
-                    Id =3,
-                    Title="Dune",
-                    GenreID=3,
-                    PageCount=450,
-                    PublishDate=new DateTime(2014,12,16)
-                }
 
-        };
+        private readonly BookStore_DBContext _context;
+        public Book_Controller(BookStore_DBContext context)
+        {
+            _context = context;
+        }
+    
 
         [HttpGet]
         public List<Book> GetBook()
         {
-            var bookList = BookList.OrderBy(x => x.Id).ToList<Book>();
+            var bookList = _context.Books.OrderBy(x => x.Id).ToList<Book>();
             return bookList;
         }
 
         [HttpGet("{id}")]
         public Book GetById(int id)
         {
-            var book = BookList.Where(book => book.Id == id).SingleOrDefault();
+            var book = _context.Books.Where(book => book.Id == id).SingleOrDefault();
             return book;
         }
 
         [HttpPost]
         public IActionResult AddBook([FromBody] Book newBook)
         {
-            var book = BookList.SingleOrDefault(x => x.Title == newBook.Title);
+            var book = _context.Books.SingleOrDefault(x => x.Title == newBook.Title);
 
             if (book is not null)
                 return BadRequest();
 
-            BookList.Add(newBook);
+            _context.Books.Add(newBook);
+            _context.SaveChanges();
             return Ok();
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateBook(int id, [FromBody] Book updateBook)
         {
-            var book = BookList.SingleOrDefault(book => book.Id == id);
+            var book = _context.Books.SingleOrDefault(book => book.Id == id);
 
             if (book is null)
                 return BadRequest();
@@ -74,19 +59,22 @@ namespace BookStore_WebAPI.Controllers
             book.Title = updateBook.Title != default ? updateBook.Title : book.Title;
             book.PublishDate = updateBook.PublishDate != default ? updateBook.PublishDate : book.PublishDate;
             book.Id = updateBook.Id != default ? updateBook.Id : book.Id;
-
+            
+            _context.SaveChanges();
+            
             return Ok();
         }
 
         [HttpDelete("{id}")]
         public IActionResult DeleteBook(int id)
         {
-            var book = BookList.SingleOrDefault(book => book.Id == id);
+            var book = _context.Books.SingleOrDefault(book => book.Id == id);
 
             if (book is null)
                 return BadRequest();
 
-            BookList.Remove(book);
+            _context.Books.Remove(book);
+            _context.SaveChanges();
             return Ok();
         }
     }
