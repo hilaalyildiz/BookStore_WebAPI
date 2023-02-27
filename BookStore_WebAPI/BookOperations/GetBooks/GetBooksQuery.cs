@@ -11,20 +11,21 @@ namespace BookStore_WebAPI.BookOperations.GetBooks
     public class GetBooksQuery
     {
         private readonly BookStore_DBContext _dbcontext;
-        //private readonly IMapper _mapper;
-        public GetBooksQuery(BookStore_DBContext dbcontext)
+        private readonly IMapper _mapper;
+        public GetBooksQuery(BookStore_DBContext dbcontext, IMapper mapper)
         {
             _dbcontext = dbcontext;
-            //_mapper = mapper;
+            _mapper = mapper;
         }
 
         public List<BooksViewModel> Handle()
         {
             var bookList = _dbcontext.Books.OrderBy(x => x.Id).ToList<Book>();
 
-            List<BooksViewModel> vm = new List <BooksViewModel>();
-            
-            foreach(var book in bookList)
+            List<BooksViewModel> vm = _mapper.Map<List<BooksViewModel>>(bookList);
+            //new List <BooksViewModel>();
+
+            /*foreach(var book in bookList)
             {
                 vm.Add(new BooksViewModel()
                 {
@@ -33,8 +34,8 @@ namespace BookStore_WebAPI.BookOperations.GetBooks
                     PublishDate = book.PublishDate.Date.ToString("dd/MM/yyy"),
                     PageCount = book.PageCount
                 }) ;
-            }
-            
+            }*/
+
             return vm;
         }
     }

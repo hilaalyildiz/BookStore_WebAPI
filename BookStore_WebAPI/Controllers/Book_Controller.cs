@@ -12,6 +12,8 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using BookStore_WebAPI.UpdateBook;
 using BookStore_WebAPI.DeleteBook;
 using AutoMapper;
+using FluentValidation.Results;
+using FluentValidation;
 
 namespace BookStore_WebAPI.Controllers
 {
@@ -63,7 +65,22 @@ namespace BookStore_WebAPI.Controllers
             {
                 CreateBookCommand command = new CreateBookCommand(_context,_mapper);
                 command.Model = newBook;
+
+                CreateBookCommandValidator validator = new CreateBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
+
+                //Son kullanıcıya hata göstermez. Bunun için ValidateAndThrow metodu kullanılır.
+                /*if (!result.IsValid)
+                {
+                    foreach (var item in result.Errors)
+                    {
+                        Console.WriteLine("Özellik " + item.PropertyName + "- Error Message:" + item.ErrorMessage);
+                    }
+                }else
+                {
+                    command.Handle();
+                }*/
             } catch(Exception ex)
             {
                 return BadRequest(ex.Message);
@@ -98,6 +115,8 @@ namespace BookStore_WebAPI.Controllers
             {
                 DeleteBookCommand command = new DeleteBookCommand(_context);
                 command.BookId = id;
+                DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
+                validator.ValidateAndThrow(command);
                 command.Handle();
             }
             catch (Exception ex)
