@@ -47,6 +47,10 @@ namespace BookStore_WebAPI.Controllers
             {
                 GetBookDetailQuery query = new GetBookDetailQuery(_context,_mapper);
                 query.BookId = id;
+
+                GetBookDetailQueryValidator validator = new GetBookDetailQueryValidator();
+                validator.ValidateAndThrow(query);
+
                 result = query.Handle();
             }
             catch (Exception ex)
@@ -68,9 +72,11 @@ namespace BookStore_WebAPI.Controllers
 
                 CreateBookCommandValidator validator = new CreateBookCommandValidator();
                 validator.ValidateAndThrow(command);
+
                 command.Handle();
 
                 //Son kullanıcıya hata göstermez. Bunun için ValidateAndThrow metodu kullanılır.
+                
                 /*if (!result.IsValid)
                 {
                     foreach (var item in result.Errors)
@@ -98,6 +104,10 @@ namespace BookStore_WebAPI.Controllers
                 UpdateBookCommand command = new UpdateBookCommand(_context);
                 command.BookId = id;
                 command.Model = updateBook;
+
+                UpdateBookCommandValidator validator = new UpdateBookCommandValidator();
+                validator.ValidateAndThrow(command);
+
                 command.Handle();
             }
             catch (Exception ex)
@@ -115,8 +125,10 @@ namespace BookStore_WebAPI.Controllers
             {
                 DeleteBookCommand command = new DeleteBookCommand(_context);
                 command.BookId = id;
+
                 DeleteBookCommandValidator validator = new DeleteBookCommandValidator();
                 validator.ValidateAndThrow(command);
+
                 command.Handle();
             }
             catch (Exception ex)
