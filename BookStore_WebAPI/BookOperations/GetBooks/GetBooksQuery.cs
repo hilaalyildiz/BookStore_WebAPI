@@ -1,4 +1,5 @@
-﻿using BookStore_WebAPI.Common;
+﻿using AutoMapper;
+using BookStore_WebAPI.Common;
 using BookStore_WebAPI.DbOperations;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,9 +11,11 @@ namespace BookStore_WebAPI.BookOperations.GetBooks
     public class GetBooksQuery
     {
         private readonly BookStore_DBContext _dbcontext;
+        //private readonly IMapper _mapper;
         public GetBooksQuery(BookStore_DBContext dbcontext)
         {
             _dbcontext = dbcontext;
+            //_mapper = mapper;
         }
 
         public List<BooksViewModel> Handle()

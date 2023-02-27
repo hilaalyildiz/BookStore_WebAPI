@@ -1,4 +1,5 @@
-﻿using BookStore_WebAPI.DbOperations;
+﻿using AutoMapper;
+using BookStore_WebAPI.DbOperations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
@@ -10,9 +11,11 @@ namespace BookStore_WebAPI.BookOperations.CreateBook
     {
         public CreateBookModel Model { get; set; }
         private readonly BookStore_DBContext _dbcontext;
-        public CreateBookCommand(BookStore_DBContext dbcontext)
+        private readonly IMapper _mapper;
+        public CreateBookCommand(BookStore_DBContext dbcontext, IMapper mapper)
         {
             _dbcontext = dbcontext;
+            _mapper = mapper;
         }
 
         public void Handle()
@@ -21,12 +24,14 @@ namespace BookStore_WebAPI.BookOperations.CreateBook
 
             if (book is not null)
                 throw new InvalidOperationException("Kitap zaten mevcut");
-            
-            book = new Book();
-            book.Title = Model.Title;
-            book.PageCount = Model.PageCount;
-            book.PublishDate = Model.PublishDate;
-            book.GenreID = Model.GenreId;
+
+            book = _mapper.Map<Book>(Model);
+
+            //book = new Book();
+            //book.Title = Model.Title;
+            //book.PageCount = Model.PageCount;
+            //book.PublishDate = Model.PublishDate;
+            //book.GenreID = Model.GenreId;
 
 
             _dbcontext.Books.Add(book);

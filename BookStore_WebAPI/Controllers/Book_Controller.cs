@@ -11,6 +11,7 @@ using BookStore_WebAPI.GetBookDetail;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using BookStore_WebAPI.UpdateBook;
 using BookStore_WebAPI.DeleteBook;
+using AutoMapper;
 
 namespace BookStore_WebAPI.Controllers
 {
@@ -20,16 +21,18 @@ namespace BookStore_WebAPI.Controllers
         {
 
         private readonly BookStore_DBContext _context;
-        public Book_Controller(BookStore_DBContext context)
+        private readonly IMapper _mapper;
+        public Book_Controller(BookStore_DBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
     
 
         [HttpGet]
         public IActionResult GetBook()
         {
-            GetBooksQuery query = new GetBooksQuery(_context);
+            GetBooksQuery query = new GetBooksQuery(_context,_mapper);
             var result = query.Handle();
             return Ok(result);
         }
@@ -40,7 +43,7 @@ namespace BookStore_WebAPI.Controllers
             BookDetailViewModel result;
             try
             {
-                GetBookDetailQuery query = new GetBookDetailQuery(_context);
+                GetBookDetailQuery query = new GetBookDetailQuery(_context,_mapper);
                 query.BookId = id;
                 result = query.Handle();
             }
@@ -58,7 +61,7 @@ namespace BookStore_WebAPI.Controllers
             
             try
             {
-                CreateBookCommand command = new CreateBookCommand(_context);
+                CreateBookCommand command = new CreateBookCommand(_context,_mapper);
                 command.Model = newBook;
                 command.Handle();
             } catch(Exception ex)

@@ -12,6 +12,7 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BookStore_WebAPI
@@ -36,6 +37,7 @@ namespace BookStore_WebAPI
             });
 
             services.AddDbContext<BookStore_DBContext>(options => options.UseInMemoryDatabase(databaseName: "BookStoreDB"));
+            services.AddAutoMapper(Assembly.GetExecutingAssembly()); 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
