@@ -4,20 +4,20 @@ using System;
 using System.Linq;
 using BookStore_WebAPI.DbOperations;
 using Microsoft.EntityFrameworkCore;
-using BookStore_WebAPI.BookOperations.GetBooks;
-using BookStore_WebAPI.BookOperations.CreateBook;
-using static BookStore_WebAPI.BookOperations.CreateBook.CreateBookCommand;
-using BookStore_WebAPI.GetBookDetail;
+using static BookStore_WebAPI.Application.BookOperations.Commands.CreateBook.CreateBookCommand;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using BookStore_WebAPI.UpdateBook;
-using BookStore_WebAPI.DeleteBook;
 using AutoMapper;
 using FluentValidation.Results;
 using FluentValidation;
+using BookStore_WebAPI.Application.BookOperations.GetBookDetail;
+using BookStore_WebAPI.Application.BookOperations.Commands.CreateBook;
+using BookStore_WebAPI.Application.BookOperations.Commands.UpdateBook;
+using BookStore_WebAPI.Application.BookOperations.Commands.DeleteBook;
+using BookStore_WebAPI.Application.BookOperations.Queries.GetBooks;
 
 namespace BookStore_WebAPI.Controllers
 {
-        [ApiController]
+    [ApiController]
         [Route("[controller]s")]
         public class Book_Controller : ControllerBase
         {

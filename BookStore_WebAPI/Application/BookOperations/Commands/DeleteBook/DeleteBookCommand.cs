@@ -2,7 +2,7 @@
 using System;
 using System.Linq;
 
-namespace BookStore_WebAPI.DeleteBook
+namespace BookStore_WebAPI.Application.BookOperations.Commands.DeleteBook
 {
     public class DeleteBookCommand
     {
@@ -11,7 +11,7 @@ namespace BookStore_WebAPI.DeleteBook
 
         public DeleteBookCommand(BookStore_DBContext dbContext)
         {
-            _dbContext = dbContext;    
+            _dbContext = dbContext;
         }
 
         public void Handle()

@@ -1,4 +1,5 @@
 ﻿using BookStore_WebAPI.DbOperations;
+using BookStore_WebAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -13,6 +14,19 @@ namespace BookStore_WebAPI.DBOperations
             {
                 if (context.Books is null)
                     return;
+                context.Genres.AddRange(
+                    new Genre
+                    {
+                        Name = "Personal Growth"
+                    },
+                    new Genre
+                    {
+                        Name = "Science Fiction"
+                    },
+                    new Genre
+                    {
+                        Name = "Romance"
+                    });
 
                 context.Books.AddRange(
                     new Book

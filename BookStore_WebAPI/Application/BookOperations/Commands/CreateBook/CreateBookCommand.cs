@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using BookStore_WebAPI.DbOperations;
+using BookStore_WebAPI.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Linq;
 
-namespace BookStore_WebAPI.BookOperations.CreateBook
+namespace BookStore_WebAPI.Application.BookOperations.Commands.CreateBook
 {
     public class CreateBookCommand
     {

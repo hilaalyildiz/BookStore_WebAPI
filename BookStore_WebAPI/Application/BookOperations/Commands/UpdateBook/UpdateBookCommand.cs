@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
 
-namespace BookStore_WebAPI.UpdateBook
+namespace BookStore_WebAPI.Application.BookOperations.Commands.UpdateBook
 {
     public class UpdateBookCommand
     {
@@ -24,7 +24,7 @@ namespace BookStore_WebAPI.UpdateBook
 
             book.GenreID = Model.GenreId != default ? Model.GenreId : book.GenreID;
             book.Title = Model.Title != default ? Model.Title : book.Title;
-           
+
             _dbContext.SaveChanges();
 
         }
