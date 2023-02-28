@@ -65,8 +65,6 @@ namespace BookStore_WebAPI.Controllers
         public IActionResult AddBook([FromBody] CreateBookModel newBook)
         {
             
-            try
-            {
                 CreateBookCommand command = new CreateBookCommand(_context,_mapper);
                 command.Model = newBook;
 
@@ -87,10 +85,6 @@ namespace BookStore_WebAPI.Controllers
                 {
                     command.Handle();
                 }*/
-            } catch(Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
 
             return Ok();
         }
